@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import type { ChangeEvent, ChangeEventHandler, FormEvent, ReactNode } from 'react'
 import './App.css'
 
-type VideoProject = {
+export type VideoProject = {
   id: number
   project_name: string
   project_category: string
@@ -24,7 +24,7 @@ type VideoProject = {
   additional_info: string
 }
 
-type FormState = {
+export type FormState = {
   projectName: string
   projectCategory: string
   projectDate: string
@@ -67,6 +67,37 @@ const initialForm: FormState = {
 }
 
 const API_URL = import.meta.env.VITE_API_URL ?? 'http://127.0.0.1:8000/api'
+const CATEGORY_OPTIONS = [
+  'School of Engineering Technology',
+  'School of Social and Basic Science',
+  'School of Mechanical Engineering',
+  'School of Energy Engineering',
+  'School of Computing and Informatics Student',
+]
+const CAMERA_OPTIONS = ['Motasem Ajloni', 'Suhaib Sarairah', 'Baraa', 'Omar Qudah']
+
+const stripSpaces = (value: string) => value.replace(/\s+/g, '')
+
+const formatDateSegment = (dateValue: string) => {
+  if (!dateValue) return 'NoDate'
+  const date = new Date(dateValue)
+  if (Number.isNaN(date.getTime())) return 'NoDate'
+  const day = String(date.getDate()).padStart(2, '0')
+  const month = date.toLocaleString('en-US', { month: 'short' })
+  const year = date.getFullYear()
+  return `${day}${month}${year}`
+}
+
+const buildVideoCode = (form: FormState, versionNumber: number) => {
+  const partA = form.projectName || 'Project'
+  const partB = stripSpaces(form.projectCategory) || 'Category'
+  const partC = formatDateSegment(form.projectDate)
+  const partD = stripSpaces(form.videoTitle) || 'Video'
+  const partE = form.module || '0'
+  const partF = form.block || '0'
+  const partG = versionNumber || 1
+  return `${partA}_${partB}_${partC}_${partD}_M${partE}_B${partF}_V${partG}`
+}
 
 function App() {
   const [formData, setFormData] = useState<FormState>(initialForm)
@@ -102,9 +133,14 @@ function App() {
     fetchProjects()
   }, [])
 
-  const handleChange = (evt: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (evt: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = evt.target
     setFormData((prev) => ({ ...prev, [name]: value }))
+  }
+
+  const handleGenerateCode = () => {
+    const code = buildVideoCode(formData, projects.length + 1)
+    setFormData((prev) => ({ ...prev, videoCode: code }))
   }
 
   const handleSubmit = async (evt: FormEvent<HTMLFormElement>) => {
@@ -166,218 +202,200 @@ function App() {
       </header>
 
       <main>
-        <section className="panel">
-          <form className="project-form" onSubmit={handleSubmit}>
-            <FormSection title="Project Information">
-              <FormRow>
-                <TextInput
-                  label="Project Name *"
-                  name="projectName"
-                  value={formData.projectName}
-                  onChange={handleChange}
-                  required
-                />
-                <TextInput
-                  label="Project Category / School"
-                  name="projectCategory"
-                  value={formData.projectCategory}
-                  onChange={handleChange}
-                />
-              </FormRow>
-              <FormRow>
-                <TextInput
-                  label="Date"
-                  name="projectDate"
-                  type="date"
-                  value={formData.projectDate}
-                  onChange={handleChange}
-                />
-                <TextInput
-                  label="Pathway / Course Title"
-                  name="pathway"
-                  value={formData.pathway}
-                  onChange={handleChange}
-                />
-              </FormRow>
-            </FormSection>
-
-            <FormSection title="Video Details">
-              <FormRow>
-                <TextInput label="Module" name="module" value={formData.module} onChange={handleChange} />
-                <TextInput label="Block" name="block" value={formData.block} onChange={handleChange} />
-              </FormRow>
-              <FormRow>
-                <TextInput label="Video" name="video" value={formData.video} onChange={handleChange} />
-                <TextInput label="Video Code" name="videoCode" value={formData.videoCode} onChange={handleChange} />
-              </FormRow>
-              <FormRow>
-                <TextInput
-                  label="Video Title *"
-                  name="videoTitle"
-                  value={formData.videoTitle}
-                  onChange={handleChange}
-                  required
-                />
-              </FormRow>
-            </FormSection>
-
-            <FormSection title="Team & Production">
-              <FormRow>
-                <TextInput
-                  label="Main Camera Man"
-                  name="mainCameraMan"
-                  value={formData.mainCameraMan}
-                  onChange={handleChange}
-                />
-                <TextInput
-                  label="Camera Man Assistant"
-                  name="cameraAssistant"
-                  value={formData.cameraAssistant}
-                  onChange={handleChange}
-                />
-              </FormRow>
-              <FormRow>
-                <TextInput
-                  label="Instructor on Camera"
-                  name="instructorOnCamera"
-                  value={formData.instructorOnCamera}
-                  onChange={handleChange}
-                />
-                <TextInput
-                  label="Graphic Designer"
-                  name="graphicDesigner"
-                  value={formData.graphicDesigner}
-                  onChange={handleChange}
-                />
-              </FormRow>
-            </FormSection>
-
-            <FormSection title="Additional Information">
-              <FormRow>
-                <TextInput
-                  label="Script Link"
-                  name="scriptLink"
-                  value={formData.scriptLink}
-                  onChange={handleChange}
-                  placeholder="https://..."
-                />
-                <TextInput
-                  label="Screencast"
-                  name="screencastLink"
-                  value={formData.screencastLink}
-                  onChange={handleChange}
-                  placeholder="https://..."
-                />
-              </FormRow>
-              <FormRow>
-                <TextInput
-                  label="Time In"
-                  name="timeIn"
-                  type="time"
-                  value={formData.timeIn}
-                  onChange={handleChange}
-                />
-                <TextInput
-                  label="Time Out"
-                  name="timeOut"
-                  type="time"
-                  value={formData.timeOut}
-                  onChange={handleChange}
-                />
-              </FormRow>
-              <FormRow>
-                <TextArea
-                  label="Additional Notes"
-                  name="additionalInfo"
-                  value={formData.additionalInfo}
-                  onChange={handleChange}
-                  rows={3}
-                />
-              </FormRow>
-            </FormSection>
-
-            <div className="form-actions">
-              <button type="submit" disabled={submitting}>
-                {submitting ? 'Adding Project...' : 'Add Project'}
-              </button>
-              {successMessage && <p className="success">{successMessage}</p>}
-              {error && <p className="error">{error}</p>}
-            </div>
-          </form>
-        </section>
-
-        <section className="panel">
-          <div className="list-header">
-            <h2>Projects</h2>
-            <button onClick={fetchProjects} disabled={loading}>
-              {loading ? 'Refreshing...' : 'Refresh'}
-            </button>
-          </div>
-
-          {orderedProjects.length === 0 && !loading ? (
-            <EmptyState />
-          ) : (
-            <ul className="project-list">
-              {orderedProjects.map((project) => (
-                <li key={project.id} className="project-card">
-                  <div className="project-card__heading">
-                    <h3>{project.project_name}</h3>
-                    <span>{project.project_category || 'Unassigned'}</span>
-                  </div>
-                  <dl>
-                    <div>
-                      <dt>Video Title</dt>
-                      <dd>{project.video_title || '—'}</dd>
-                    </div>
-                    <div>
-                      <dt>Video Code</dt>
-                      <dd>{project.video_code || '—'}</dd>
-                    </div>
-                    <div>
-                      <dt>Module</dt>
-                      <dd>{project.module || '—'}</dd>
-                    </div>
-                    <div>
-                      <dt>Team</dt>
-                      <dd>
-                        {project.main_camera_man || 'Main camera N/A'}
-                        {project.camera_assistant ? ` · Asst: ${project.camera_assistant}` : ''}
-                      </dd>
-                    </div>
-                    <div>
-                      <dt>Timeline</dt>
-                      <dd>
-                        {(project.time_in && project.time_out && `${project.time_in} → ${project.time_out}`) || 'Not set'}
-                      </dd>
-                    </div>
-                  </dl>
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
+        <ProjectForm
+          formData={formData}
+          submitting={submitting}
+          successMessage={successMessage}
+          error={error}
+          onChange={handleChange}
+          onSubmit={handleSubmit}
+          onGenerateCode={handleGenerateCode}
+        />
+        <ProjectList projects={orderedProjects} loading={loading} onRefresh={fetchProjects} />
       </main>
     </div>
   )
 }
 
+type ProjectFormProps = {
+  formData: FormState
+  submitting: boolean
+  successMessage?: string
+  error?: string
+  onChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  onSubmit: (evt: FormEvent<HTMLFormElement>) => void
+  onGenerateCode: () => void
+}
+
+const ProjectForm = ({ formData, submitting, successMessage, error, onChange, onSubmit, onGenerateCode }: ProjectFormProps) => (
+  <section className="panel">
+    <form className="project-form" onSubmit={onSubmit}>
+      <FormSection title="Project Information">
+        <FormRow>
+          <TextInput label="Project Name *" name="projectName" value={formData.projectName} onChange={onChange} required />
+          <SelectInput
+            label="Project Category / School"
+            name="projectCategory"
+            value={formData.projectCategory}
+            onChange={onChange}
+            options={CATEGORY_OPTIONS}
+            placeholder="Choose a school"
+            required
+          />
+        </FormRow>
+        <FormRow>
+          <TextInput label="Date" name="projectDate" type="date" value={formData.projectDate} onChange={onChange} />
+          <TextInput label="Pathway / Course Title" name="pathway" value={formData.pathway} onChange={onChange} />
+        </FormRow>
+      </FormSection>
+
+      <FormSection title="Video Details">
+        <FormRow>
+          <TextInput label="Module" name="module" value={formData.module} onChange={onChange} />
+          <TextInput label="Block" name="block" value={formData.block} onChange={onChange} />
+        </FormRow>
+        <FormRow>
+          <TextInput label="Video" name="video" value={formData.video} onChange={onChange} />
+          <VideoCodeInput value={formData.videoCode} onGenerate={onGenerateCode} />
+        </FormRow>
+        <FormRow>
+          <TextInput label="Video Title *" name="videoTitle" value={formData.videoTitle} onChange={onChange} required />
+        </FormRow>
+      </FormSection>
+
+      <FormSection title="Team & Production">
+        <FormRow>
+          <SelectInput
+            label="Main Camera Man"
+            name="mainCameraMan"
+            value={formData.mainCameraMan}
+            onChange={onChange}
+            options={CAMERA_OPTIONS}
+            placeholder="Select main camera"
+          />
+          <TextInput label="Camera Man Assistant" name="cameraAssistant" value={formData.cameraAssistant} onChange={onChange} />
+        </FormRow>
+        <FormRow>
+          <TextInput label="Instructor on Camera" name="instructorOnCamera" value={formData.instructorOnCamera} onChange={onChange} />
+          <TextInput label="Graphic Designer" name="graphicDesigner" value={formData.graphicDesigner} onChange={onChange} />
+        </FormRow>
+      </FormSection>
+
+      <FormSection title="Additional Information">
+        <FormRow>
+          <TextInput label="Script Link" name="scriptLink" value={formData.scriptLink} onChange={onChange} placeholder="https://..." />
+          <TextInput
+            label="Screencast"
+            name="screencastLink"
+            value={formData.screencastLink}
+            onChange={onChange}
+            placeholder="https://..."
+          />
+        </FormRow>
+        <FormRow>
+          <TextInput label="Time In" name="timeIn" type="time" value={formData.timeIn} onChange={onChange} />
+          <TextInput label="Time Out" name="timeOut" type="time" value={formData.timeOut} onChange={onChange} />
+        </FormRow>
+        <FormRow>
+          <TextArea label="Additional Notes" name="additionalInfo" value={formData.additionalInfo} onChange={onChange} rows={3} />
+        </FormRow>
+      </FormSection>
+
+      <div className="form-actions">
+        <button type="submit" disabled={submitting}>
+          {submitting ? 'Adding Project...' : 'Add Project'}
+        </button>
+        {successMessage && <p className="success">{successMessage}</p>}
+        {error && <p className="error">{error}</p>}
+      </div>
+    </form>
+  </section>
+)
+
+type ProjectListProps = {
+  projects: VideoProject[]
+  loading: boolean
+  onRefresh: () => void
+}
+
+const ProjectList = ({ projects, loading, onRefresh }: ProjectListProps) => (
+  <section className="panel">
+    <div className="list-header">
+      <h2>Projects</h2>
+      <button onClick={onRefresh} disabled={loading}>
+        {loading ? 'Refreshing...' : 'Refresh'}
+      </button>
+    </div>
+
+    {projects.length === 0 && !loading ? (
+      <EmptyState />
+    ) : (
+      <ul className="project-list">
+        {projects.map((project) => (
+          <li key={project.id} className="project-card">
+            <div className="project-card__heading">
+              <h3>{project.project_name}</h3>
+              <span>{project.project_category || 'Unassigned'}</span>
+            </div>
+            <dl>
+              <ProjectMeta label="Video Title" value={project.video_title} />
+              <ProjectMeta label="Video Code" value={project.video_code} />
+              <ProjectMeta label="Module" value={project.module} />
+              <ProjectMeta
+                label="Team"
+                value={
+                  project.main_camera_man
+                    ? `${project.main_camera_man}${project.camera_assistant ? ` · Asst: ${project.camera_assistant}` : ''}`
+                    : project.camera_assistant
+                      ? `Asst: ${project.camera_assistant}`
+                      : 'Not assigned'
+                }
+              />
+              <ProjectMeta
+                label="Timeline"
+                value={project.time_in && project.time_out ? `${project.time_in} → ${project.time_out}` : 'Not set'}
+              />
+            </dl>
+          </li>
+        ))}
+      </ul>
+    )}
+  </section>
+)
+
+const ProjectMeta = ({ label, value }: { label: string; value: string | null }) => (
+  <div>
+    <dt>{label}</dt>
+    <dd>{value || '—'}</dd>
+  </div>
+)
+
 type FieldProps = {
   label: string
   name: string
   value: string
-  onChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
+  onChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   required?: boolean
 }
 
 type TextInputProps = FieldProps & {
   type?: string
   placeholder?: string
+  readOnly?: boolean
 }
 
-const TextInput = ({ label, name, value, onChange, type = 'text', required, placeholder }: TextInputProps) => (
+const TextInput = ({ label, name, value, onChange, type = 'text', required, placeholder, readOnly }: TextInputProps) => (
   <label className="field">
     <span>{label}</span>
-    <input type={type} name={name} value={value} onChange={onChange} required={required} placeholder={placeholder} />
+    <input
+      type={type}
+      name={name}
+      value={value}
+      onChange={onChange}
+      required={required}
+      placeholder={placeholder}
+      readOnly={readOnly}
+    />
   </label>
 )
 
@@ -389,6 +407,37 @@ const TextArea = ({ label, name, value, onChange, rows = 4 }: TextAreaProps) => 
   <label className="field">
     <span>{label}</span>
     <textarea name={name} value={value} onChange={onChange} rows={rows} />
+  </label>
+)
+
+type SelectInputProps = FieldProps & {
+  options: string[]
+  placeholder?: string
+}
+
+const SelectInput = ({ label, name, value, onChange, required, options, placeholder }: SelectInputProps) => (
+  <label className="field">
+    <span>{label}</span>
+    <select name={name} value={value} onChange={onChange} required={required}>
+      <option value="">{placeholder || 'Select an option'}</option>
+      {options.map((option) => (
+        <option key={option} value={option}>
+          {option}
+        </option>
+      ))}
+    </select>
+  </label>
+)
+
+const VideoCodeInput = ({ value, onGenerate }: { value: string; onGenerate: () => void }) => (
+  <label className="field">
+    <span>Video Code</span>
+    <div className="code-field">
+      <input type="text" name="videoCode" value={value} readOnly />
+      <button type="button" onClick={onGenerate}>
+        Generate
+      </button>
+    </div>
   </label>
 )
 
