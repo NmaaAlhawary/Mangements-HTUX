@@ -211,7 +211,13 @@ function App() {
           onSubmit={handleSubmit}
           onGenerateCode={handleGenerateCode}
         />
-        <ProjectList projects={orderedProjects} loading={loading} onRefresh={fetchProjects} />
+        <ProjectList
+          projects={orderedProjects}
+          loading={loading}
+          downloading={downloading}
+          onRefresh={fetchProjects}
+          onDownload={handleDownload}
+        />
       </main>
     </div>
   )
@@ -315,16 +321,23 @@ const ProjectForm = ({ formData, submitting, successMessage, error, onChange, on
 type ProjectListProps = {
   projects: VideoProject[]
   loading: boolean
+  downloading: boolean
   onRefresh: () => void
+  onDownload: () => void
 }
 
-const ProjectList = ({ projects, loading, onRefresh }: ProjectListProps) => (
+const ProjectList = ({ projects, loading, downloading, onRefresh, onDownload }: ProjectListProps) => (
   <section className="panel">
     <div className="list-header">
       <h2>Projects</h2>
-      <button onClick={onRefresh} disabled={loading}>
-        {loading ? 'Refreshing...' : 'Refresh'}
-      </button>
+      <div className="list-actions">
+        <button onClick={onDownload} disabled={downloading}>
+          {downloading ? 'Preparing...' : 'Download Excel'}
+        </button>
+        <button onClick={onRefresh} disabled={loading}>
+          {loading ? 'Refreshing...' : 'Refresh'}
+        </button>
+      </div>
     </div>
 
     {projects.length === 0 && !loading ? (
@@ -339,7 +352,6 @@ const ProjectList = ({ projects, loading, onRefresh }: ProjectListProps) => (
             </div>
             <dl>
               <ProjectMeta label="Video Title" value={project.video_title} />
-              <ProjectMeta label="Video Code" value={project.video_code} />
               <ProjectMeta label="Module" value={project.module} />
               <ProjectMeta
                 label="Team"
