@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Video Production Manager
 
 A full-stack demo for tracking video shooting and editing projects. The backend is powered by Django REST Framework and the frontend is a Vite + React single page app.
@@ -40,3 +41,6 @@ npm run dev
 ```
 
 Visit the dev server output (typically `http://127.0.0.1:5173`) to use the Video Production Manager UI. The app reads from `VITE_API_URL`, so update `.env` if the backend runs elsewhere.
+=======
+# Mangements-HTUX
+>>>>>>> a8a553fce8ff924cc6c5ec5e9726cc97f94d4762
