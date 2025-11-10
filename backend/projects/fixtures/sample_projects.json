@@ -1,0 +1,77 @@
+[
+  {
+    "model": "projects.videoproject",
+    "pk": 1,
+    "fields": {
+      "project_name": "Orientation Video Series",
+      "project_category": "School of Media Arts",
+      "project_date": "2024-10-01",
+      "pathway": "Digital Storytelling",
+      "module": "Orientation",
+      "block": "Fall 2024",
+      "video": "Orientation Part 1",
+      "video_code": "ORI-101",
+      "video_title": "Welcome to the Program",
+      "main_camera_man": "Alya Hassan",
+      "camera_assistant": "Yousef Nawfal",
+      "instructor_on_camera": "Prof. Lina Omar",
+      "graphic_designer": "Nabil Omar",
+      "script_link": "https://example.com/scripts/orientation",
+      "screencast_link": "https://example.com/screencasts/orientation",
+      "time_in": "09:00:00",
+      "time_out": "12:00:00",
+      "additional_info": "Need B-roll of campus exterior.",
+      "created_at": "2024-08-15T09:15:00Z"
+    }
+  },
+  {
+    "model": "projects.videoproject",
+    "pk": 2,
+    "fields": {
+      "project_name": "Lab Safety Refresher",
+      "project_category": "School of Engineering",
+      "project_date": "2024-11-12",
+      "pathway": "Chemical Engineering",
+      "module": "Safety",
+      "block": "Block B",
+      "video": "Safety Module",
+      "video_code": "LAB-204",
+      "video_title": "Safe Handling Procedures",
+      "main_camera_man": "Maya Al-Qadi",
+      "camera_assistant": "Rakan Jaber",
+      "instructor_on_camera": "Dr. Sami Khoury",
+      "graphic_designer": "Nada Matar",
+      "script_link": "https://example.com/scripts/lab-safety",
+      "screencast_link": "",
+      "time_in": "13:30:00",
+      "time_out": "16:00:00",
+      "additional_info": "Overlay latest lab signage in post.",
+      "created_at": "2024-09-20T14:45:00Z"
+    }
+  },
+  {
+    "model": "projects.videoproject",
+    "pk": 3,
+    "fields": {
+      "project_name": "Entrepreneurship Spotlight",
+      "project_category": "Business School",
+      "project_date": "2024-09-18",
+      "pathway": "MBA Pathway",
+      "module": "Capstone",
+      "block": "Q3",
+      "video": "Startup Showcase",
+      "video_code": "MBA-330",
+      "video_title": "Student Venture Highlights",
+      "main_camera_man": "Hadi Al Mansour",
+      "camera_assistant": "",
+      "instructor_on_camera": "Dean Omar Saleh",
+      "graphic_designer": "Sarah Latif",
+      "script_link": "",
+      "screencast_link": "https://example.com/screencasts/mba",
+      "time_in": null,
+      "time_out": null,
+      "additional_info": "Collect release forms from all featured teams.",
+      "created_at": "2024-07-30T11:05:00Z"
+    }
+  }
+]
