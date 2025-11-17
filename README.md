@@ -1,9 +1,22 @@
-<<<<<<< HEAD
 # Video Production Manager
 
-A full-stack demo for tracking video shooting and editing projects. The backend is powered by Django REST Framework and the frontend is a Vite + React single page app.
+A full-stack demo for tracking video shooting and editing projects. The backend is powered by Django REST Framework, and the frontend is a Vite + React.
 
-## Prerequisites
+# Overview
+
+Video Production Manager is a streamlined dashboard that helps schools, departments, and media teams organize their video projects effortlessly.
+It enables you to plan shoots, assign crew members, record production details, and maintain a complete database of all videos produced. Whether you’re managing academic recordings, promotional content, orientation videos, or student projects, this tool keeps everything in one place.
+
+#  Key Features
+1.  Project Management
+
+- Create and organize video projects by category or school
+
+- Add project names, pathways, course titles, and module details
+
+- Set dates, video codes, blocks, and titles
+
+## Prerequisite.
 
 - Python 3.9+
 - Node.js 18+ and npm
@@ -21,26 +34,23 @@ python manage.py runserver
 
 The API will be available at `http://127.0.0.1:8000/api/projects/`.
 
-### Sample admin data
-
-```bash
-cd backend
-python manage.py loaddata sample_projects  # loads backend/projects/fixtures/sample_projects.json
-python manage.py createsuperuser           # follow prompts for admin login
-```
-
-You can now sign in to `http://127.0.0.1:8000/admin/` and review/edit the seeded projects.
+You can now sign in to `http://127.0.0.1:8000/admin/` and review/edit the projects from admin side. 
 
 ## Frontend (React)
 
 ```bash
 cd frontend
-cp .env.example .env        # optional, defaults to localhost API
+cp .env.example .env      
 npm install
 npm run dev
 ```
 
 Visit the dev server output (typically `http://127.0.0.1:5173`) to use the Video Production Manager UI. The app reads from `VITE_API_URL`, so update `.env` if the backend runs elsewhere.
 =======
-# Mangements-HTUX
->>>>>>> a8a553fce8ff924cc6c5ec5e9726cc97f94d4762
+# Video Production Manager
+
+
+
+
+
+
