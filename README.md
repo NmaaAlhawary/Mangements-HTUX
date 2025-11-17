@@ -46,7 +46,7 @@ npm run dev
 ```
 
 Visit the dev server output (typically `http://127.0.0.1:5173`) to use the Video Production Manager UI. The app reads from `VITE_API_URL`, so update `.env` if the backend runs elsewhere.
-=======
+
 # Video Production Manager
 
 
